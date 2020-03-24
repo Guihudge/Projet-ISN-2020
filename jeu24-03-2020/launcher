@@ -1,0 +1,94 @@
+import configparser
+import sys, os
+
+
+def set_resolition(section, cfg):
+    widht = int(input("largeur: "))
+    Height = int(input("hauteur : "))
+    cfg.set(section, "WIDHT", str(widht))
+    cfg.set(section, "HEIGHT", str(Height))
+
+
+def set_volume(section, cfg):
+    volume = int(input("Entrez un nombre entre 1 et 10"))
+
+    cfg.set(section, "Volume", str(volume/10))
+
+
+def set_mute(section, cfg):
+    print("1) activer")
+    print("2) désactiver")
+
+    choix = int(input("> "))
+    if choix == 1:
+        cfg.set(section, "Mute", "True")
+    elif choix == 2:
+        cfg.set(section, "Mute", "False")
+    else:
+        pass
+
+
+def init_file():
+    section_1 = "SCREEN"
+    section_2 = "SOUND"
+
+    cfg.add_section(section_1)
+    cfg.add_section(section_2)
+
+
+def write_file(cfg):
+    cfg.write(open('config.cfg', 'w'))
+
+
+def menu(cfg):
+    print("1) Jouer")
+    print("2) Option")
+    print("3) Quiter")
+
+    selec = int(input("> "))
+
+    if selec == 1:
+        play()
+    elif selec == 2:
+        option(cfg)
+    elif selec == 3:
+        quit()
+    else:
+        pass
+
+
+def play():
+    path = sys.executable
+    os.system(path + " main.py")
+    exit()
+
+
+def exit():
+    sys.exit(0)
+
+
+def option(cfg):
+    print("1) Couper / Activer le son")
+    print("2) définir le volume (de 1 à 10)")
+    print("3) Changer la résolution")
+
+    selec = int(input("> "))
+
+    if selec == 1:
+        set_mute("SOUND", cfg)
+    elif selec == 2:
+        set_volume("SOUND", cfg)
+    elif selec == 3:
+        set_resolition("SCREEN", cfg)
+    else:
+        pass
+
+    write_file(cfg)
+
+
+cfg = configparser.ConfigParser()
+cfg.read("config.cfg")
+
+
+while True:
+    menu(cfg)
